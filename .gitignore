@@ -1,4 +1,13 @@
-
 /.idea/
 /target/
 /dependency-reduced-pom.xml
+/RPGMenu.iml
+RPGMenu.iml
+/.settings/
+/.classpath
+/.project
+/bin/
+*.iml
+/resources/
+/doc/
+.vscode/

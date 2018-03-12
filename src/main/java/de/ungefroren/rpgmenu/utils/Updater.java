@@ -23,8 +23,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import pl.betoncraft.betonquest.BetonQuest;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,36 +48,47 @@ public class Updater {
 
     private static final String VERSION_TEXT_URL = "https://raw.githubusercontent.com/joblo2213/RPGMenu/master/version.txt";
     private static final String LATEST_DOWNLOAD_URL = "https://github.com/joblo2213/RPGMenu/releases";
-    private final Version current;
-    private final Version latest;
+    private Version current;
+    private Version latest;
+    private boolean error = false;
+    private UpdateNotifier updateNotifier = null;
 
 
-    public Updater() throws IOException {
-        this.current = new Version(RPGMenu.getInstance().getDescription().getVersion());
-        BufferedReader br = new BufferedReader(new InputStreamReader(new URL(VERSION_TEXT_URL).openStream()));
-        String line = br.readLine();
-        br.close();
+    public Updater() {
         try {
-            this.latest = new Version(line.trim());
-        } catch (IllegalArgumentException | NullPointerException e) {
-            throw new IOException("version.txt is invalid", e);
+            this.current = new Version(RPGMenu.getInstance().getDescription().getVersion());
+            BufferedReader br = new BufferedReader(new InputStreamReader(new URL(VERSION_TEXT_URL).openStream()));
+            String line = br.readLine();
+            br.close();
+            try {
+                this.latest = new Version(line.trim());
+            } catch (IllegalArgumentException | NullPointerException e) {
+                throw new IOException("version.txt is invalid", e);
+            }
+        } catch (IOException e) {
+            Log.error("Error while initialising updater: §c" + e.getMessage());
+            this.error = true;
         }
     }
 
     /**
-     * @return if a newer version than the current one exists
+     * @return if a newer version than the current one exists (if updater is not initialised this returns false)
      */
     public boolean isOldVersion() {
+        if (error) return false;
         return current.isBefore(latest);
     }
 
     /**
      * Updates the plugins config after switching to a new version to keep it working
+     * (if updater is not initialised this does nothing)
      */
     public void updateConfig() {
+        if (error) return;
         FileConfiguration defaultConfig = YamlConfiguration.loadConfiguration(
-                new InputStreamReader(RPGMenu.getInstance().getResource("config.yml")));
-        FileConfiguration currentConfig = RPGMenu.getInstance().getConfig();
+                new InputStreamReader(RPGMenu.getInstance().getResource("rpgmenu.config.yml")));
+        FileConfiguration currentConfig = YamlConfiguration.loadConfiguration(
+                new File(BetonQuest.getInstance().getDataFolder(), "rpgmenu.config.yml"));
         //check config version
         if (defaultConfig.getInt("config-version") == currentConfig.getInt("config-version")) return;
         //update
@@ -89,9 +102,9 @@ public class Updater {
         }
         currentConfig.set("config-version", defaultConfig.getInt("config-version"));
         try {
-            File config = new File(RPGMenu.getInstance().getDataFolder(), "config.yml");
-            File old = new File(RPGMenu.getInstance().getDataFolder(), "old_config.yml");
-            //keep a copy of the old config.yml
+            File config = new File(BetonQuest.getInstance().getDataFolder(), "rpgmenu.config.yml");
+            File old = new File(BetonQuest.getInstance().getDataFolder(), "rpgmenu.config_old.yml");
+            //keep a copy of the old rpgmenu.config.yml
             Files.move(config.toPath(), old.toPath(), StandardCopyOption.REPLACE_EXISTING);
             currentConfig.save(config);
             Log.info("Updated config to version " + defaultConfig.getInt("config-version") + "!");
@@ -102,8 +115,10 @@ public class Updater {
 
     /**
      * Notify about new versions and the risks of dev versions
+     * (if updater is not initialised this does nothing)
      */
     public void showVersionInfo() {
+        if (error) return;
         if (current.isDev()) {
             Log.info("You are using an development build of RPGMenu.\n" +
                              "Development builds may contain bugs so be cautious.\n" +
@@ -111,9 +126,25 @@ public class Updater {
         }
         if (!isOldVersion()) return;
         Log.error("You are using an outdated version of RPGMenu. Please update to " + latest);
-        if (RPGMenu.getConfiguration().ingameUpdateNotifications) {
-            Bukkit.getPluginManager().registerEvents(new UpdateNotifier(), RPGMenu.getInstance());
-        }
+    }
+
+    /**
+     * Enables the ingame update notifier if a old plugin version is used and config setting is true
+     */
+    public void enableUpdateNotifier() {
+        if (!isOldVersion()) return;
+        if (!RPGMenu.getConfiguration().ingameUpdateNotifications) return;
+        this.updateNotifier = new UpdateNotifier();
+        Bukkit.getPluginManager().registerEvents(this.updateNotifier, RPGMenu.getInstance());
+    }
+
+    /**
+     * Disables the ingame update notifier
+     */
+    public void disableUpdateNotifier() {
+        if (this.updateNotifier == null) return;
+        HandlerList.unregisterAll(this.updateNotifier);
+        this.updateNotifier = null;
     }
 
     public static class Version {

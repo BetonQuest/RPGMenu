@@ -17,6 +17,7 @@ import pl.betoncraft.betonquest.ObjectNotFoundException;
 import pl.betoncraft.betonquest.config.ConfigPackage;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * Id of a menu
@@ -33,7 +34,7 @@ public class MenuID extends ID {
         super(pack, id);
         super.rawInstruction = null;
         //find file
-        file = new File(super.pack.getFolder(), "menus" + File.separator + id + ".yml");
+        file = new File(super.pack.getFolder(), "menus" + File.separator + super.getBaseID() + ".yml");
         if (!file.exists()) throw new ObjectNotFoundException("Menu '" + getFullID() + "' is not defined");
     }
 
@@ -44,4 +45,9 @@ public class MenuID extends ID {
         return file;
     }
 
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.getBaseID(), super.pack.getName());
+    }
 }

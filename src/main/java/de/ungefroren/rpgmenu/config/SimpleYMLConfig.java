@@ -30,11 +30,11 @@ public abstract class SimpleYMLConfig extends SimpleYMLSection {
     protected final File file;
 
     public SimpleYMLConfig(File file) throws InvalidConfigurationException {
-        this(file.getName(),file);
+        this(file.getName(), file);
     }
 
     public SimpleYMLConfig(String name, File file) throws InvalidConfigurationException {
-        this(name,file, YamlConfiguration.loadConfiguration(file));
+        this(name, file, YamlConfiguration.loadConfiguration(file));
     }
 
     public SimpleYMLConfig(File file, FileConfiguration config) throws InvalidConfigurationException {

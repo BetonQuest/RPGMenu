@@ -40,12 +40,44 @@ import java.util.List;
  */
 public class MenuItem extends SimpleYMLSection {
 
+    /**
+     * The package this item is inside
+     */
     private final ConfigPackage pack;
+
+    /**
+     * The betonquest quest item this item is based on
+     */
     private final Item item;
+
+    /**
+     * HashMap with a language as key and the corresponding description as value
+     */
     private final HashMap<String, ItemDescription> descriptions;
+
+    /**
+     * Ids of all events that should be run on left click
+     */
     private final List<EventID> left_click;
+
+    /**
+     * Ids of all events that should be run on right click
+     */
     private final List<EventID> right_click;
+
+    /**
+     * Conditions that have to be matched to view the item
+     */
     private final List<ConditionID> conditions;
+
+    /**
+     * If the menu should be closed when the item is clicked
+     */
+    private final boolean close;
+
+    /**
+     * Id of the item
+     */
     private final String id;
 
     public MenuItem(ConfigPackage pack, String id, ConfigurationSection section) throws InvalidConfigurationException {
@@ -56,7 +88,7 @@ public class MenuItem extends SimpleYMLSection {
             //load item
             ItemID itemID = new ItemID(pack, getString("item").trim());
             VariableNumber amount;
-            amount = new VariableNumber(pack.getName(), new DefaultSetting<String>("0") {
+            amount = new VariableNumber(pack.getName(), new DefaultSetting<String>("1") {
                 @Override
                 protected String of() throws Missing {
                     return getString("amount");
@@ -98,12 +130,20 @@ public class MenuItem extends SimpleYMLSection {
             //load display conditions
             this.conditions = new ArrayList<>();
             try {
-                if (config.contains("conditions"))
                     this.conditions.addAll(getConditions("conditions", pack));
-                else
-                    this.conditions.addAll(getConditions("condtion", pack));
             } catch (Missing e) {
             }
+            try {
+                this.conditions.addAll(getConditions("condition", pack));
+            } catch (Missing e) {
+            }
+            //load if menu should close when item is clicked
+            this.close = new DefaultSetting<Boolean>(RPGMenu.getConfiguration().defaultCloseOnClick) {
+                @Override
+                protected Boolean of() throws Missing, Invalid {
+                    return getBoolean("close");
+                }
+            }.get();
         } catch (ObjectNotFoundException | InstructionParseException e) {
             throw new InvalidConfigurationException(e.getMessage());
         }
@@ -114,23 +154,26 @@ public class MenuItem extends SimpleYMLSection {
      *
      * @param player that has clicked the item
      * @param type   type of the click action
+     * @return if the menu should be closed after this operation
      */
-    public void onClick(Player player, ClickType type) {
+    public boolean onClick(Player player, ClickType type) {
         switch (type) {
             case RIGHT:
             case SHIFT_RIGHT:
                 for (EventID eventID : this.right_click) {
+                    Log.debug("Item " + name + ": Run event " + eventID);
                     BetonQuest.event(PlayerConverter.getID(player), eventID);
-                    Log.debug("Item + " + name + ": Run event " + eventID);
                 }
-                return;
+                return this.close;
             case LEFT:
             case SHIFT_LEFT:
                 for (EventID eventID : this.left_click) {
+                    Log.debug("Item " + name + ": Run event " + eventID);
                     BetonQuest.event(PlayerConverter.getID(player), eventID);
-                    Log.debug("Item + " + name + ": Run event " + eventID);
                 }
-                return;
+                return this.close;
+            default:
+                return false;
         }
     }
 
@@ -143,8 +186,10 @@ public class MenuItem extends SimpleYMLSection {
     public boolean display(Player player) {
         for (ConditionID condition : this.conditions) {
             if (!BetonQuest.condition(PlayerConverter.getID(player), condition)) {
-                Log.debug("Item " + name + " wont be displayed: Condition" + condition + " returned false.");
+                Log.debug("Item " + name + " wont be displayed: condition" + condition + " returned false.");
                 return false;
+            } else {
+                Log.debug("Item " + name + ": condition " + condition + " returned true");
             }
         }
         return true;
@@ -179,7 +224,16 @@ public class MenuItem extends SimpleYMLSection {
         }
     }
 
+    /**
+     * @return the items internal id
+     */
+    public String getId() {
+        return id;
+    }
 
+    /**
+     * Extended, static copy of pl.betoncraft.betonquest.Instruction.Item for easier quest item handling
+     */
     public static class Item {
 
         private ItemID itemID;

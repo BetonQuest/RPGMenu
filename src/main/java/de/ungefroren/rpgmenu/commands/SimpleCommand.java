@@ -13,6 +13,7 @@
 package de.ungefroren.rpgmenu.commands;
 
 import de.ungefroren.rpgmenu.RPGMenu;
+import de.ungefroren.rpgmenu.config.RPGMenuConfig;
 import de.ungefroren.rpgmenu.utils.Log;
 import de.ungefroren.rpgmenu.utils.Utils;
 import org.bukkit.Bukkit;
@@ -27,6 +28,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
     public final int minimalArgs;
     private Permission perimssion;
     private CommandMap commandMap = null;
+    private String usage = "null";
 
     public SimpleCommand(String name, int minimalArgs) {
         super(name);
@@ -49,8 +52,9 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
         this.perimssion = null;
     }
 
-    public SimpleCommand(String name, Permission reqPermission, int minimalArgs) {
-        this(name, minimalArgs);
+    public SimpleCommand(String name, Permission reqPermission, int minimalArgs, String... alises) {
+        super(name, "", "", Arrays.asList(alises));
+        this.minimalArgs = minimalArgs;
         this.perimssion = reqPermission;
     }
 
@@ -62,7 +66,9 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
      * @param args   the arguments specified
      * @return must be a list of all possible competitions for the current arg, ignoring already typed chars
      */
-    public abstract List<String> simpleTabComplete(CommandSender sender, String alias, String[] args);
+    public List<String> simpleTabComplete(CommandSender sender, String alias, String[] args) {
+        return new ArrayList<>();
+    }
 
     /**
      * Override this method to handle what happens if the command gets executed, all permissions are met and required arguments are
@@ -81,12 +87,20 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
      * @param sender the CommandSender performing the command
      * @return the message to send
      */
-    protected abstract String noPermissionMessage(CommandSender sender);
+    protected String noPermissionMessage(CommandSender sender) {
+        return RPGMenuConfig.getMessage(sender, "command_no_permission");
+    }
+
+    @Override
+    public Command setUsage(String usage) {
+        this.usage = usage;
+        return this;
+    }
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
         if (args.length < minimalArgs) {
-            sender.sendMessage("§cUsage:\n§7" + super.getUsage());
+            RPGMenuConfig.sendMessage(sender, "command_usage", usage);
             return false;
         }
         if (perimssion != null) {
@@ -129,7 +143,8 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
             PluginManager manager = Bukkit.getPluginManager();
             Class<? extends PluginManager> managerClass = manager.getClass();
             this.commandMap = (CommandMap) Utils.getField(managerClass, "commandMap").get(manager);
-            this.register(commandMap);
+            this.commandMap.register("rpgmenu", this);
+            Log.info("Registered plugin command!");
             return true;
         } catch (Exception e) {
             Log.error("Could not register command " + getName() + ":");
@@ -157,9 +172,10 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
             } else {
                 commands.remove(this);
             }
+            Log.info("Unregistered plugin command!");
             return true;
         } catch (Exception e) {
-            Log.error("Could not unregister command " + getName() + ":");
+            Log.error("Could not unregister command §7" + getName() + "§4:");
             e.printStackTrace();
             return false;
         }

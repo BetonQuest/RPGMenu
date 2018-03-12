@@ -39,7 +39,7 @@ public abstract class SimpleYMLSection {
     public SimpleYMLSection(String name, ConfigurationSection config) throws InvalidConfigurationException {
         this.config = config;
         this.name = name;
-        if (config.getKeys(false).size() == 0)
+        if (config == null || config.getKeys(false) == null || config.getKeys(false).size() == 0)
             throw new InvalidSimpleConfigException("RPGMenuConfig is invalid or empty!");
     }
 

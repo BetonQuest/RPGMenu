@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * Contains the description of a item in a menu. Variables are parsed and color codes are replaced.
- *
+ * <p>
  * Created on 27.01.2018
  *
  * @author Jonas Blocher
@@ -43,6 +43,7 @@ public class ItemDescription {
 
     /**
      * Receive display name of item for specific player
+     *
      * @param playerID id of the player
      * @return
      */
@@ -54,12 +55,12 @@ public class ItemDescription {
 
     /**
      * Receive lore of the item for specific player
+     *
      * @param playerID id of the player
      * @return
      */
     public List<String> getLore(String playerID) {
-        List<Line> lines = this.lines;
-        lines.remove(0);
+        List<Line> lines = this.lines.subList(1, this.lines.size());
         if (lines.isEmpty()) return new ArrayList<>();
         List<String> lore = new ArrayList<>(lines.size());
         for (Line line : lines) {
@@ -95,6 +96,7 @@ public class ItemDescription {
 
         /**
          * Resolves all variables in this line for specified player
+         *
          * @param playerID id of a player
          * @return
          */

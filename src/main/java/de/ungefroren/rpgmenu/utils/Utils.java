@@ -12,6 +12,9 @@
 
 package de.ungefroren.rpgmenu.utils;
 
+import de.ungefroren.rpgmenu.RPGMenu;
+
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -99,5 +102,32 @@ public class Utils {
         throw new NoSuchMethodException("Can't find method " + name + " with " + paramlength + " parameters");
     }
 
+    /**
+     * Save a resource at a given path
+     *
+     * @param directory    the file where to save the resource
+     * @param resourceName name of the resource
+     * @throws IOException If an I/O error occurs
+     */
+    public static void saveResource(File directory, String resourceName) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(RPGMenu.getInstance().getResource(resourceName)));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(directory));
+        int i;
+        while ((i = br.read()) != -1) bw.write(i);
+        bw.close();
+        br.close();
+    }
 
+    /**
+     * @param string name of a class which should be loaded
+     * @return if the class exists
+     */
+    public static boolean doesClassExist(String string) {
+        try {
+            Class.forName(string);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 }

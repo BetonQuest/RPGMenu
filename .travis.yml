@@ -1,9 +1,25 @@
+notifications:
+  email: false
 language: java
 jdk:
 - oraclejdk8
+install: true
 script: mvn package
+env:
+  global:
+  - secure: oE1IWeVoV92JfqEhHyQmA41bBFOai135Rmq++OqgbRPC4UlAqELQa8agPXHqQE4sX+FQ4vtdvp3CC/LIdVFYKnXAyDLiMidvTYH4KWGJuiD55s+Ql+sXb0v7BH10yK3woY0gk86Y0CImYiNsAn5tD19ouqxc4zuK7RyaEnMHctwRQ/GQvko4uSMBRq1V4UHnuoaojpiQnfufVaOT1rqCl3tki7tDPWV0aVJnh/v+hQ3XqLomNUDxHuxlvEFJjRZ6lreZECrDSq2xZbrY5khHW92LJDtKqDKMx7GNvunAJ6o8frZqzNUIuTuSjr/8FHS4QUnNszSKLa1w38No688FaxxvvUtbG08QR7XEqnABV3OwT4+Gqw+rlytiTL3yg+KiRT4jAMF4nkyCdVRp6MQwKVTOOcEvvcIJpf7rOmprQifDM+bkIwMLuVB1yR6+5d9OSrrv7JgP5wyC+VNAG2O2pvk42gzFDUacuDvct4XXK2s+pOvnkawv9zR1j/28O1pGEZPKvtixkZ1pJdIowXmjE89DCeDaUDqlsZ9aH83WEAyT3prbw/x3C7F2nhmnCz6EHRKei1qbgPWDF29BiV4j1qInPmfHGH+KR4jB6tLw1WP+m31qlHXwv3mtixteUgyH34GJBPvyg/s50TIMJO+2L68hMMIUSTjzPHqBkLD5U1I=
+  - secure: fvUrixC4m+V5/9DI0AH0BxNdt5Ll/mMoOyBvZ8qCrZfjaNFqI1CXuhrtZu6MN7ASf5Rtdz7CVyYUs7ZTUPrbt9MwLXe2LIIKltb1Se/i/cpVBF6RK8EDgv3QnUyDXqL2YozMaxQCyl3G2dI+cNepBeeq6aFaMRAsbFAQXYv/I8gP4vhfm9i1wnfTKmAu99R0hJ85ArT2WYCAUZrPmY9vk9vnE0EuqM8agyjaaTb862zWn2BfCnvCGjDGZPkMlnk/YIOtFAdea6uhCJiR4OV1H1M++IphsjxeZVzRbmGOQGCx28hud0ru0UAOghZqBlA5fmW0Oe/FSY4/9HxyWPuhPkJ2Gr/L11CN60lIEsTEAqmRTfkQEHTteYiP0i01gBSOiBAi20tVpaorbbL4l0AwtXpGuv/8lA16m2trGgXQseTDvCZ7chhK3dkm9jmkG0GAbw+l/BcJXhM2IEQYW5Z7gQLaj3KUpAiPCucwaieVndUhwQ5LO8RlIvsbozf+sgq0m2Fw0j7b6IKEaUHWdQEzW1mXdC2ZnbduRJKkN3Lfdc1vENQI062uspWIl2VmbevhaE3kSWSxagNcI1SJPyT84xHTe2jfBsQiTO1jLlwidU7Juiwamv0s7xKbGwWiJYXvk4r+7GE4CqvAyM4QJPYwAK2eQ6rJ17MWPNUh/FhR5RY=
 deploy:
   api_key: $O_AUTH_TOKEN
   provider: releases
   skip_cleanup: true
-  file: $TRAVIS_BUILD_DIR/target/RPGMenu.jar
+  file: "$TRAVIS_BUILD_DIR/target/RPGMenu.jar"
+  on:
+    tags: true
+after_success:
+- chmod +x discord.sh
+- "./discord.sh success $DISCORD_WEBHOOK_URL"
+after_failure:
+- chmod +x discord.sh
+- "./discord.sh failure $DISCORD_WEBHOOK_URL"
+
