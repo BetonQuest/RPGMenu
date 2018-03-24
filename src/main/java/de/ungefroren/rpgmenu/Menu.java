@@ -62,15 +62,15 @@ public class Menu extends SimpleYMLConfig implements Listener {
      */
     private final String title;
 
-    /**
-     * Hashmap with a items id as key and the menu item object containing all data of the item
+    /*
+      Hashmap with a items id as key and the menu item object containing all data of the item
      */
-    private final HashMap<String, MenuItem> items;
+    //private final HashMap<String, MenuItem> items;
 
     /**
-     * Array which contains a list with the ids of all items for each slot
+     * List of all slots objects as defined in the slots section
      */
-    private final List<String>[] slots;
+    private final List<Slots> slots;
 
     /**
      * Optional which contains the item this menu is bound to or is empty if none is bound
@@ -123,28 +123,38 @@ public class Menu extends SimpleYMLConfig implements Listener {
             }
         }.get();
         // load items
-        this.items = new HashMap<>();
+        HashMap<String, MenuItem> itemsMap = new HashMap<>();
         if (!config.isConfigurationSection("items")) throw new Missing("items");
         for (String key : config.getConfigurationSection("items").getKeys(false)) {
             try {
-                items.put(key, new MenuItem(this.ID.getPackage(), key, config.getConfigurationSection("items." + key)));
+                itemsMap.put(key, new MenuItem(this.ID.getPackage(), key, config.getConfigurationSection("items." + key)));
             } catch (InvalidSimpleConfigException e) {
                 throw new InvalidSimpleConfigException(e);
             }
         }
         //load slots
-        this.slots = new List[height * 9];
+        this.slots = new ArrayList<>();
         if (!config.isConfigurationSection("slots")) throw new Missing("slots");
         for (String key : config.getConfigurationSection("slots").getKeys(false)) {
-            if (!key.matches("\\d+")) throw new Invalid("slots", key + " is not a valid slot number");
-            int slot = Integer.parseInt(key);
-            if (slot > slots.length - 1) throw new Invalid("slots." + slot, "inventory only has " + (slots.length - 1) + "slots");
-            List<String> items = getStrings("slots." + key);
-            for (String item : items) {
-                if (!this.items.containsKey(item))
+            List<MenuItem> itemsList = new ArrayList<>();
+            //check if items from list are all valid
+            for (String item : getStrings("slots." + key)) {
+                if (!itemsMap.containsKey(item))
                     throw new Invalid("slots." + key, "item " + item + " not found");
+                else itemsList.add(itemsMap.get(item));
             }
-            this.slots[slot] = items;
+            // create a new slots object and add it to list
+            try {
+                this.slots.add(new Slots(key, itemsList));
+            } catch (IllegalArgumentException e) {
+                throw new Invalid("slots", e);
+            }
+        }
+        //check for doubled assigned slots
+        try {
+            Slots.checkSlots(this.slots);
+        } catch (Slots.SlotDoubledException e) {
+            throw new Invalid("slots." + e.getSlots(), e);
         }
 
         //load command and register listener
@@ -228,8 +238,8 @@ public class Menu extends SimpleYMLConfig implements Listener {
      * @return get the items for all slots
      */
     public MenuItem[] getItems(Player player) {
-        MenuItem[] items = new MenuItem[this.slots.length];
-        for (int i = 0; i < this.slots.length; i++) {
+        MenuItem[] items = new MenuItem[this.height * 9];
+        for (int i = 0; i < items.length; i++) {
             items[i] = this.getItem(player, i);
         }
         return items;
@@ -243,10 +253,10 @@ public class Menu extends SimpleYMLConfig implements Listener {
      * @return menu item for that slot or null if none is specified
      */
     public MenuItem getItem(Player player, int slot) {
-        if (this.slots[slot] == null || this.slots[slot].isEmpty()) return null;
-        for (String key : this.slots[slot]) {
-            MenuItem item = this.items.get(key);
-            if (item != null && item.display(player)) return item;
+        for (Slots slots : this.slots) {
+            if (slots.containsSlot(slot)) {
+                return slots.getItem(player, slot);
+            }
         }
         return null;
     }
