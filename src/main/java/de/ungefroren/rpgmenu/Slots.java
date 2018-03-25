@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Utility object that handles which items are assigned to which slots
+ *
  * Created on 21.03.2018.
  *
  * @author Jonas Blocher

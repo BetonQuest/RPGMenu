@@ -63,9 +63,11 @@ public class Menu extends SimpleYMLConfig implements Listener {
     private final String title;
 
     /*
-      Hashmap with a items id as key and the menu item object containing all data of the item
+     * Hashmap with a items id as key and the menu item object containing all data of the item
+     *
+     * Currently this information isn't needed after initialising the Menu
      */
-    //private final HashMap<String, MenuItem> items;
+    //private final HashMap<String, MenuItem> itemsMap;
 
     /**
      * List of all slots objects as defined in the slots section
@@ -81,6 +83,16 @@ public class Menu extends SimpleYMLConfig implements Listener {
      * Conditions which have to be matched to open the menu
      */
     private final List<ConditionID> openConditions;
+
+    /**
+     * Events which are fired when the menu is opened
+     */
+    private final List<EventID> openEvents;
+
+    /**
+     * Events which are fired when the menu is closed
+     */
+    private final List<EventID> closeEvents;
 
     /**
      * Optional which contains the command this menu is bound to or is empty if none is bound
@@ -99,6 +111,18 @@ public class Menu extends SimpleYMLConfig implements Listener {
         this.openConditions = new ArrayList<>();
         try {
             this.openConditions.addAll(getConditions("open_conditions", this.ID.getPackage()));
+        } catch (Missing e) {
+        }
+        //load opening events
+        this.openEvents = new ArrayList<>();
+        try {
+            this.openEvents.addAll(getEvents("open_events", this.ID.getPackage()));
+        } catch (Missing e) {
+        }
+        //load closing events
+        this.closeEvents = new ArrayList<>();
+        try {
+            this.closeEvents.addAll(getEvents("close_events", this.ID.getPackage()));
         } catch (Missing e) {
         }
         //load bound item
@@ -206,6 +230,32 @@ public class Menu extends SimpleYMLConfig implements Listener {
     }
 
     /**
+     * Runs all open events for the specified player
+     *
+     * @param player the player to run the events for
+     */
+    public void runOpenEvents(Player player) {
+        Log.debug("Menu " + ID + ": Running open events");
+        for (EventID event : this.openEvents) {
+            BetonQuest.event(PlayerConverter.getID(player), event);
+            Log.debug("Menu " + ID + ": Run event " + event);
+        }
+    }
+
+    /**
+     * Runs all close events for the specified player
+     *
+     * @param player the player to run the events for
+     */
+    public void runCloseEvents(Player player) {
+        Log.debug("Menu " + ID + ": Running close events");
+        for (EventID event : this.closeEvents) {
+            BetonQuest.event(PlayerConverter.getID(player), event);
+            Log.debug("Menu " + ID + ": Run event " + event);
+        }
+    }
+
+    /**
      * @return the menu id of this menu
      */
     public MenuID getID() {
@@ -213,7 +263,7 @@ public class Menu extends SimpleYMLConfig implements Listener {
     }
 
     /**
-     * @return the tpackage this menu is located in
+     * @return the package this menu is located in
      */
     public ConfigPackage getPackage() {
         return this.ID.getPackage();

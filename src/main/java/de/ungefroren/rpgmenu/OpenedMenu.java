@@ -55,6 +55,7 @@ public class OpenedMenu implements Listener {
         player.openInventory(inventory);
         Bukkit.getPluginManager().registerEvents(this, RPGMenu.getInstance());
         openedMenus.put(playerId, this);
+        this.data.runOpenEvents(player);
     }
 
     /**
@@ -185,6 +186,8 @@ public class OpenedMenu implements Listener {
         //clean up
         HandlerList.unregisterAll(this);
         openedMenus.remove(playerId);
+        //run close events
+        this.data.runCloseEvents(player);
     }
 
     /**
