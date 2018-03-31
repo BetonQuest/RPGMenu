@@ -35,10 +35,7 @@ import pl.betoncraft.betonquest.config.ConfigPackage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created on 12.01.2018
@@ -176,9 +173,12 @@ public class RPGMenu extends JavaPlugin {
      */
     public ReloadInformation reloadData() {
         //unregister old menus
-        if (menus != null) for (Menu menu : this.menus.values()) {
-            menu.unregister();
-            this.menus.remove(menu.getID());
+        if (menus != null) {
+            Iterator<Menu> iterator = this.menus.values().iterator();
+            while (iterator.hasNext()) {
+                iterator.next().unregister();
+                iterator.remove();
+            }
         }
         //disable ingame update notifier
         updater.disableUpdateNotifier();

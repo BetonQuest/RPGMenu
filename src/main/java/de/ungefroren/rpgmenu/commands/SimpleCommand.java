@@ -144,7 +144,7 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
             Class<? extends PluginManager> managerClass = manager.getClass();
             this.commandMap = (CommandMap) Utils.getField(managerClass, "commandMap").get(manager);
             this.commandMap.register("rpgmenu", this);
-            Log.info("Registered plugin command!");
+            Log.debug("Registered command " + getName() + "!");
             return true;
         } catch (Exception e) {
             Log.error("Could not register command " + getName() + ":");
@@ -172,7 +172,7 @@ public abstract class SimpleCommand extends Command implements PluginIdentifiabl
             } else {
                 commands.remove(this);
             }
-            Log.info("Unregistered plugin command!");
+            Log.debug("Unregistered command " + getName() + "!");
             return true;
         } catch (Exception e) {
             Log.error("Could not unregister command §7" + getName() + "§4:");
