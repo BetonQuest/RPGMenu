@@ -35,7 +35,11 @@ import pl.betoncraft.betonquest.config.ConfigPackage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created on 12.01.2018
@@ -236,7 +240,6 @@ public class RPGMenu extends JavaPlugin {
             this.menus.get(id).unregister();
             this.menus.remove(id);
         }
-        //
         ReloadInformation info = new ReloadInformation();
         try {
             this.menus.put(id, new Menu(id));

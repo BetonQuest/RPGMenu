@@ -120,7 +120,7 @@ public class Slots {
         int index = this.getIndex(slot);
         if (index == -1) throw new RuntimeException("Invalid slot for Slots '" + toString() + "': " + slot);
         try {
-            return items.get(index);
+            return this.getItems(player).get(index);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
