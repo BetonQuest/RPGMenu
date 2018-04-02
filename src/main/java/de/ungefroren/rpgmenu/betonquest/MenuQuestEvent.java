@@ -11,9 +11,8 @@
  */
 package de.ungefroren.rpgmenu.betonquest;
 
-import de.ungefroren.rpgmenu.MenuID;
-import de.ungefroren.rpgmenu.RPGMenu;
 import org.bukkit.entity.Player;
+
 import pl.betoncraft.betonquest.Instruction;
 import pl.betoncraft.betonquest.InstructionParseException;
 import pl.betoncraft.betonquest.ObjectNotFoundException;
@@ -21,23 +20,20 @@ import pl.betoncraft.betonquest.QuestRuntimeException;
 import pl.betoncraft.betonquest.api.QuestEvent;
 import pl.betoncraft.betonquest.utils.PlayerConverter;
 
+import de.ungefroren.rpgmenu.MenuID;
+import de.ungefroren.rpgmenu.RPGMenu;
+
 /**
  * Event to open or close menus
- *
+ * <p>
  * Created on 16.03.2018.
  *
  * @author Jonas Blocher
  */
 public class MenuQuestEvent extends QuestEvent {
 
-    public enum Operation {
-        OPEN,
-        CLOSE
-    }
-
     private final Operation operation;
     private MenuID menu;
-
     public MenuQuestEvent(Instruction instruction) throws InstructionParseException {
         super(instruction);
         this.operation = instruction.getEnum(Operation.class);
@@ -58,5 +54,10 @@ public class MenuQuestEvent extends QuestEvent {
         } else {
             RPGMenu.closeMenu(player);
         }
+    }
+
+    public enum Operation {
+        OPEN,
+        CLOSE
     }
 }

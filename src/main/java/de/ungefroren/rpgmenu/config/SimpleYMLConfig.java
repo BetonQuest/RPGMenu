@@ -12,13 +12,14 @@
 
 package de.ungefroren.rpgmenu.config;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import pl.betoncraft.betonquest.utils.Debug;
 
-import java.io.File;
-import java.io.IOException;
+import pl.betoncraft.betonquest.utils.Debug;
 
 /**
  * Created on 24.01.2018

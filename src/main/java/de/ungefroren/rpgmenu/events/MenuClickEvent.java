@@ -11,11 +11,12 @@
  */
 package de.ungefroren.rpgmenu.events;
 
-import de.ungefroren.rpgmenu.MenuID;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.ClickType;
+
+import de.ungefroren.rpgmenu.MenuID;
 
 /**
  * Called whenever a item in a menu is clicked by a player

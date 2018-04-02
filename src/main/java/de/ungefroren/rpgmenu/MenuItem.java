@@ -12,8 +12,10 @@
 
 package de.ungefroren.rpgmenu;
 
-import de.ungefroren.rpgmenu.config.SimpleYMLSection;
-import de.ungefroren.rpgmenu.utils.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -21,15 +23,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import pl.betoncraft.betonquest.*;
+
+import pl.betoncraft.betonquest.BetonQuest;
+import pl.betoncraft.betonquest.ConditionID;
+import pl.betoncraft.betonquest.EventID;
+import pl.betoncraft.betonquest.InstructionParseException;
+import pl.betoncraft.betonquest.ItemID;
+import pl.betoncraft.betonquest.ObjectNotFoundException;
+import pl.betoncraft.betonquest.QuestRuntimeException;
+import pl.betoncraft.betonquest.VariableNumber;
 import pl.betoncraft.betonquest.config.Config;
 import pl.betoncraft.betonquest.config.ConfigPackage;
 import pl.betoncraft.betonquest.item.QuestItem;
 import pl.betoncraft.betonquest.utils.PlayerConverter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import de.ungefroren.rpgmenu.config.SimpleYMLSection;
+import de.ungefroren.rpgmenu.utils.Log;
 
 /**
  * A Item which Is displayed as option in a menu and has some events that are fired when item is clicked
@@ -105,7 +114,7 @@ public class MenuItem extends SimpleYMLSection {
                     throw new Missing("text." + Config.getLanguage());
             } else {
                 this.descriptions.put(Config.getLanguage(),
-                                      new ItemDescription(this.pack, getStringList("text")));
+                        new ItemDescription(this.pack, getStringList("text")));
             }
             //load events
             this.left_click = new ArrayList<>();
@@ -130,7 +139,7 @@ public class MenuItem extends SimpleYMLSection {
             //load display conditions
             this.conditions = new ArrayList<>();
             try {
-                    this.conditions.addAll(getConditions("conditions", pack));
+                this.conditions.addAll(getConditions("conditions", pack));
             } catch (Missing e) {
             }
             try {
@@ -215,7 +224,7 @@ public class MenuItem extends SimpleYMLSection {
                 item.setItemMeta(meta);
             } catch (NullPointerException npe) {
                 Log.error("Couldn't add custom text to §7" + id + "§4: No text for language §7" + Config.getLanguage() + "§4 " +
-                                  "specified");
+                        "specified");
             }
             return item;
         } catch (QuestRuntimeException qre) {

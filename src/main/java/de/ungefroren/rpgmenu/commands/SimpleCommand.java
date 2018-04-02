@@ -12,10 +12,12 @@
 
 package de.ungefroren.rpgmenu.commands;
 
-import de.ungefroren.rpgmenu.RPGMenu;
-import de.ungefroren.rpgmenu.config.RPGMenuConfig;
-import de.ungefroren.rpgmenu.utils.Log;
-import de.ungefroren.rpgmenu.utils.Utils;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -26,11 +28,10 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import de.ungefroren.rpgmenu.RPGMenu;
+import de.ungefroren.rpgmenu.config.RPGMenuConfig;
+import de.ungefroren.rpgmenu.utils.Log;
+import de.ungefroren.rpgmenu.utils.Utils;
 
 /**
  * Abstract class to simplify creation of commands and implementation of tab complete

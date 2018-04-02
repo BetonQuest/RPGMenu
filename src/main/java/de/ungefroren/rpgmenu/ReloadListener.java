@@ -15,6 +15,7 @@ package de.ungefroren.rpgmenu;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+
 import pl.betoncraft.betonquest.api.LoadDataEvent;
 
 /**

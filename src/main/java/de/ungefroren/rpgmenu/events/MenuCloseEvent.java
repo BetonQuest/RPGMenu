@@ -11,13 +11,14 @@
  */
 package de.ungefroren.rpgmenu.events;
 
-import de.ungefroren.rpgmenu.MenuID;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
+import de.ungefroren.rpgmenu.MenuID;
+
 /**
  * Called whenever a menu is closed
- *
+ * <p>
  * Created on 16.03.2018.
  *
  * @author Jonas Blocher

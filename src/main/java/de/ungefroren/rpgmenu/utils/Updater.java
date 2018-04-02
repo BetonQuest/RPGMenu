@@ -12,22 +12,6 @@
 
 package de.ungefroren.rpgmenu.utils;
 
-import de.ungefroren.rpgmenu.RPGMenu;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import pl.betoncraft.betonquest.BetonQuest;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +20,24 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+
+import pl.betoncraft.betonquest.BetonQuest;
+
+import de.ungefroren.rpgmenu.RPGMenu;
 
 /**
  * Utility class that informs about available updates and keeps the config up to date
@@ -121,8 +123,8 @@ public class Updater {
         if (error) return;
         if (current.isDev()) {
             Log.info("You are using an development build of RPGMenu.\n" +
-                             "Development builds may contain bugs so be cautious.\n" +
-                             "If you find some please report them on the plugins GitHub page so I can fix them.");
+                    "Development builds may contain bugs so be cautious.\n" +
+                    "If you find some please report them on the plugins GitHub page so I can fix them.");
         }
         if (!isOldVersion()) return;
         Log.error("You are using an outdated version of RPGMenu. Please update to " + latest);
@@ -167,14 +169,15 @@ public class Updater {
 
         /**
          * Creates a Version object from a given string
-         * <p>
+         *
          * <b>Format: </b> <i>xx.xx</i> (add <i>-dev</i> at the end to mark it as development version)
          *
          * @param versionString string containing version
          */
         public Version(String versionString) {
             versionString = versionString.trim();
-            if (!versionString.matches("\\d+\\.\\d+( +-dev)?")) throw new IllegalArgumentException("invalid version string");
+            if (!versionString.matches("\\d+\\.\\d+( +-dev)?"))
+                throw new IllegalArgumentException("invalid version string");
             String[] args = versionString.split("(\\.| +)");
             this.primary = Integer.parseInt(args[0]);
             this.secondary = Integer.parseInt(args[1]);

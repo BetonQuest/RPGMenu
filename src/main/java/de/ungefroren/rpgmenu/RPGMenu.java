@@ -12,6 +12,26 @@
 
 package de.ungefroren.rpgmenu;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import pl.betoncraft.betonquest.BetonQuest;
+import pl.betoncraft.betonquest.ObjectNotFoundException;
+import pl.betoncraft.betonquest.config.Config;
+import pl.betoncraft.betonquest.config.ConfigPackage;
+
 import de.ungefroren.rpgmenu.betonquest.MenuCondition;
 import de.ungefroren.rpgmenu.betonquest.MenuObjective;
 import de.ungefroren.rpgmenu.betonquest.MenuQuestEvent;
@@ -22,24 +42,7 @@ import de.ungefroren.rpgmenu.events.MenuOpenEvent;
 import de.ungefroren.rpgmenu.utils.Log;
 import de.ungefroren.rpgmenu.utils.Updater;
 import de.ungefroren.rpgmenu.utils.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.java.JavaPlugin;
-import pl.betoncraft.betonquest.BetonQuest;
-import pl.betoncraft.betonquest.ObjectNotFoundException;
-import pl.betoncraft.betonquest.config.Config;
-import pl.betoncraft.betonquest.config.ConfigPackage;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import org.bstats.bukkit.Metrics;
 
 /**
  * Created on 12.01.2018
@@ -128,6 +131,10 @@ public class RPGMenu extends JavaPlugin {
     public void onEnable() {
         instance = this;
         super.onEnable();
+        //plugin metrics
+        Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.SimplePie("languages", Config::getLanguage));
+        metrics.addCustomChart(new Metrics.SingleLineChart("menus", () -> menus.size()));
         updater = new Updater();
         //notify about dev builds and new versions
         updater.showVersionInfo();

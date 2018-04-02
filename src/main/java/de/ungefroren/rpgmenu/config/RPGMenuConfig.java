@@ -12,19 +12,21 @@
 
 package de.ungefroren.rpgmenu.config;
 
-import de.ungefroren.rpgmenu.RPGMenu;
-import de.ungefroren.rpgmenu.utils.Utils;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.Player;
-import pl.betoncraft.betonquest.BetonQuest;
-import pl.betoncraft.betonquest.config.Config;
-import pl.betoncraft.betonquest.utils.PlayerConverter;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
+
+import pl.betoncraft.betonquest.BetonQuest;
+import pl.betoncraft.betonquest.config.Config;
+import pl.betoncraft.betonquest.utils.PlayerConverter;
+
+import de.ungefroren.rpgmenu.RPGMenu;
+import de.ungefroren.rpgmenu.utils.Utils;
 
 /**
  * The plugins config file

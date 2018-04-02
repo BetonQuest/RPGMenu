@@ -11,16 +11,16 @@
  */
 package de.ungefroren.rpgmenu;
 
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.entity.Player;
+
 /**
  * Utility object that handles which items are assigned to which slots
- *
+ * <p>
  * Created on 21.03.2018.
  *
  * @author Jonas Blocher

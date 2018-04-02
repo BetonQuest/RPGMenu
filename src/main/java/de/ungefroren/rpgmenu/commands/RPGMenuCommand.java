@@ -12,27 +12,29 @@
 
 package de.ungefroren.rpgmenu.commands;
 
-import de.ungefroren.rpgmenu.MenuID;
-import de.ungefroren.rpgmenu.RPGMenu;
-import de.ungefroren.rpgmenu.config.RPGMenuConfig;
-import de.ungefroren.rpgmenu.utils.Log;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
+
 import pl.betoncraft.betonquest.ObjectNotFoundException;
 import pl.betoncraft.betonquest.config.Config;
 import pl.betoncraft.betonquest.config.ConfigPackage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import de.ungefroren.rpgmenu.MenuID;
+import de.ungefroren.rpgmenu.RPGMenu;
+import de.ungefroren.rpgmenu.config.RPGMenuConfig;
+import de.ungefroren.rpgmenu.utils.Log;
 
 /**
  * The plugins main command
@@ -44,7 +46,7 @@ import java.util.List;
 public class RPGMenuCommand extends SimpleCommand {
 
     public RPGMenuCommand() {
-        super("rpgmenu", new Permission("betonquest.admin"), 0, "qm","menu", "menus", "rpgmenus", "rpgm");
+        super("rpgmenu", new Permission("betonquest.admin"), 0, "qm", "menu", "menus", "rpgmenus", "rpgm");
         setDescription("Core command of the RPGMenu addon for BetonQuest");
         setUsage("/rpgmenu <reload/open/list>");
         register();
@@ -125,7 +127,7 @@ public class RPGMenuCommand extends SimpleCommand {
                     builder
                             .append("\n" + menuID, ComponentBuilder.FormatRetention.FORMATTING)
                             .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                                  TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "click_to_open"))))
+                                    TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "click_to_open"))))
                             .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + getName() + " open " + menuID));
                 }
                 sender.spigot().sendMessage(builder.create());
@@ -206,15 +208,15 @@ public class RPGMenuCommand extends SimpleCommand {
                 .append(TextComponent.fromLegacyText("§e----- §aRPGMenu for Betonquest §e-----\n"))
                 .append("/rpgmenu reload [menu]\n").color(ChatColor.RED)
                 .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                      TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "command_info_reload"))))
+                        TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "command_info_reload"))))
                 .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rpgmenu reload "))
                 .append("/rpgmenu open <menu> [player]\n", ComponentBuilder.FormatRetention.FORMATTING)
                 .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                      TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "command_info_open"))))
+                        TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "command_info_open"))))
                 .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rpgmenu open"))
                 .append("/rpgmenu list", ComponentBuilder.FormatRetention.FORMATTING)
                 .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                      TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "command_info_list"))))
+                        TextComponent.fromLegacyText(RPGMenuConfig.getMessage(sender, "command_info_list"))))
                 .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/rpgmenu list"));
         sender.spigot().sendMessage(builder.create());
     }

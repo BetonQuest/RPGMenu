@@ -13,9 +13,9 @@
 package de.ungefroren.rpgmenu;
 
 
-import de.ungefroren.rpgmenu.events.MenuClickEvent;
-import de.ungefroren.rpgmenu.events.MenuCloseEvent;
-import de.ungefroren.rpgmenu.utils.Log;
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,8 +28,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.HashMap;
-import java.util.UUID;
+import de.ungefroren.rpgmenu.events.MenuClickEvent;
+import de.ungefroren.rpgmenu.events.MenuCloseEvent;
+import de.ungefroren.rpgmenu.utils.Log;
 
 /**
  * Class representing a menu which is currently displayed to a player
@@ -47,6 +48,7 @@ public class OpenedMenu implements Listener {
     private final UUID playerId;
     private final Menu data;
     private MenuItem[] items;
+
     public OpenedMenu(Player player, Menu menu) {
         this.data = menu;
         this.playerId = player.getUniqueId();
@@ -75,6 +77,17 @@ public class OpenedMenu implements Listener {
         OpenedMenu menu = openedMenus.get(player.getUniqueId());
         if (menu == null) return;
         menu.close();
+    }
+
+    /**
+     * Closes all currently opened menus
+     * <p>
+     * Called when the plugin unloads to prevent glitching menus
+     */
+    public static void closeAll() {
+        for (OpenedMenu openedMenu : openedMenus.values()) {
+            openedMenu.close();
+        }
     }
 
     /**
@@ -188,16 +201,5 @@ public class OpenedMenu implements Listener {
         openedMenus.remove(playerId);
         //run close events
         this.data.runCloseEvents(player);
-    }
-
-    /**
-     * Closes all currently opened menus
-     * <p>
-     * Called when the plugin unloads to prevent glitching menus
-     */
-    public static void closeAll() {
-        for (OpenedMenu openedMenu : openedMenus.values()) {
-            openedMenu.close();
-        }
     }
 }

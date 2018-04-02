@@ -12,13 +12,14 @@
 
 package de.ungefroren.rpgmenu.events;
 
-import de.ungefroren.rpgmenu.MenuID;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerEvent;
 
+import de.ungefroren.rpgmenu.MenuID;
+
 /**
  * Every event where a menu was involved
- *
+ * <p>
  * Created on 16.03.2018.
  *
  * @author Jonas Blocher
