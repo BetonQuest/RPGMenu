@@ -64,9 +64,13 @@ Translate the plugins messages to your language and create a pull request or con
 I'm happy about everyone who helps^^
 
 ## Support me
-It would help a lot if you could leave a review on the plugins spigot site. *(currently not available)*
+It would help a lot if you could leave a review on [the plugins spigot site](https://www.spigotmc.org/resources/rpgmenu.55170/).
 
 If this plugin is really usefull for you and you want you may send me a small donation via [tipeeestream](https://www.tipeeestream.com/ung3froren/donation).
+
+## License
+This plugin is licensed under the **DON'T BE A DICK PUBLIC LICENSE v1.1**.
+You find a copy of it at [LICENSE](https://github.com/joblo2213/RPGMenu/blob/master/LICENSE).
 
 ## Credits
 **A huge "THANK YOU!" goes to:** 
