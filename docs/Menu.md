@@ -134,14 +134,21 @@ items:
     close: false
 ```
 ## The `slots` section
-In the slots section you define which items from the items section should be displayed in which slot.
+In the slots section you define which items from the items section should be displayed in which slot.  
+On [this image](http://wiki.vg/images/b/bb/DoubleChest-slots.png) you can easily find out the number for each slot.  
 You can also assign multiple items to the same slot and use conditions in [the items section](#the-items-section) specify which one should be used.
 If you assign multiple items the first one for which all conditions are true will be displayed.
 
-Another thing you can do is assigning multiple items to a row of slots. Now the slots are filled up on by one with the items from the list which have all conditions returning true.  
+Another thing you can do is assigning multiple items to a row of slots. Now the slots are filled up one by one with the items from the list which have all conditions returning true.  
 To make this more clear I want to show you this example:  
 `0-2: 'quest1,quest2,quest3'`  
 Assuming that the conditions for the items say that quest1 and quest3 should be displayed to the player but quest2 shouldn't then quest1 would be in the slot 0 and quest3 in the slot 1. Slot 2 would stay empty.
+
+In addition you can also assign items to a rectangle of slots. Just like with the row the slots in this rectangle are filled up one by one with the items from the list which have all conditions returning true.  
+Here is a example:
+`14*25: 'quest1,quest2,quest3'`
+
+![rectangle-example](https://cdn.discordapp.com/attachments/420985429840625676/430808651545182208/Unbenannt.png)
 
 ### An example for a `slots` section:
 ```yml
