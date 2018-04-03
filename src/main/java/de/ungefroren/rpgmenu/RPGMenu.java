@@ -133,7 +133,7 @@ public class RPGMenu extends JavaPlugin {
         super.onEnable();
         //plugin metrics
         Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("languages", Config::getLanguage));
+        metrics.addCustomChart(new Metrics.SimplePie("language", Config::getLanguage));
         metrics.addCustomChart(new Metrics.SingleLineChart("menus", () -> menus.size()));
         updater = new Updater();
         //notify about dev builds and new versions

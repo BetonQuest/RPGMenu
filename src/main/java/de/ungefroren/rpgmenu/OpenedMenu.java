@@ -52,7 +52,7 @@ public class OpenedMenu implements Listener {
     public OpenedMenu(Player player, Menu menu) {
         this.data = menu;
         this.playerId = player.getUniqueId();
-        Inventory inventory = Bukkit.createInventory(null, 9 * data.getHeight(), data.getTitle());
+        Inventory inventory = Bukkit.createInventory(null, data.getSize(), data.getTitle());
         this.update(player, inventory);
         player.openInventory(inventory);
         Bukkit.getPluginManager().registerEvents(this, RPGMenu.getInstance());

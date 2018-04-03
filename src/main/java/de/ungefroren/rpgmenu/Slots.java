@@ -12,9 +12,7 @@
 package de.ungefroren.rpgmenu;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.entity.Player;
 
@@ -38,20 +36,43 @@ public class Slots {
             this.start = Integer.parseInt(slots);
             this.end = start;
         } else if (slots.matches("\\d+-\\d+")) {
-            this.type = Type.LINEAR_LIST;
+            this.type = Type.ROW;
             int index = slots.indexOf("-");
             this.start = Integer.parseInt(slots.substring(0, index));
             this.end = Integer.parseInt(slots.substring(index + 1));
+            if (this.end < this.start)
+                throw new IllegalArgumentException(slots + ": slot " + end + " must be after " + start);
+        } else if (slots.matches("\\d+\\*\\d+")) {
+            this.type = Type.RECTANGLE;
+            int index = slots.indexOf("*");
+            this.start = Integer.parseInt(slots.substring(0, index));
+            this.end = Integer.parseInt(slots.substring(index + 1));
+            if (this.end < this.start)
+                throw new IllegalArgumentException(slots + ": slot " + end + " must be after " + start);
+            if ((start % 9) >= (end % 9))
+                throw new IllegalArgumentException(slots + ": invalid rectangle ");
         } else throw new IllegalArgumentException(slots + " is not a valid slot identifier");
         this.items = items;
     }
 
-    public static void checkSlots(Iterable<Slots> slots) throws SlotDoubledException {
-        Set<Integer> all = new HashSet<>();
+    /**
+     * checks if all defined slots are valid
+     *
+     * @param slots         a iterable containing all slots objects to check
+     * @param inventorySize the size of the inventory in which the slots should be
+     * @throws SlotException if a defined list of slots is invalid
+     */
+    public static void checkSlots(Iterable<Slots> slots, int inventorySize) throws SlotException {
+        boolean[] isContained = new boolean[inventorySize]; //initialized with 'false'
         for (Slots s : slots) {
             for (int slot : s.getSlots()) {
-                if (all.contains(slot)) throw new SlotDoubledException(slot, s.toString());
-                else all.add(slot);
+                try {
+                    if (isContained[slot])
+                        throw new SlotException(slot, s.toString(), "slot " + slot + " was already specified");
+                    else isContained[slot] = true;
+                } catch (IndexOutOfBoundsException e) {
+                    throw new SlotException(slot, s.toString(), "slot " + slot + " exceeds inventory size");
+                }
             }
         }
     }
@@ -61,8 +82,24 @@ public class Slots {
      */
     public List<Integer> getSlots() {
         List<Integer> slots = new ArrayList<>();
-        for (int i = start; i < end; i++) {
-            slots.add(i);
+        switch (type) {
+            case SINGLE:
+                slots.add(start);
+                break;
+            case ROW:
+                for (int i = start; i <= end; i++) {
+                    slots.add(i);
+                }
+                break;
+            case RECTANGLE:
+                int i = start;
+                while (i <= end) {
+                    slots.add(i);
+                    //set i to next slot of rectangle
+                    if ((i % 9) < (end % 9)) i++;
+                    else i += 8 - (i % 9) + (start % 9) + 1;
+                }
+                break;
         }
         return slots;
     }
@@ -72,7 +109,18 @@ public class Slots {
      * @return if this slots object covers the given slot
      */
     public boolean containsSlot(int slot) {
-        return (slot <= end && slot >= start);
+        switch (type) {
+            case SINGLE:
+                return start != slot;
+            case ROW:
+                return (slot <= end && slot >= start);
+            case RECTANGLE:
+                return (slot <= end && slot >= start)
+                        && (slot % 9 >= start % 9)
+                        && (slot % 9 <= end % 9);
+            default:
+                return false;
+        }
     }
 
     /**
@@ -99,13 +147,16 @@ public class Slots {
      * @return the index of the given slot within this collection of slots, -1 if slot is not within this collection
      */
     public int getIndex(int slot) {
+        if (!containsSlot(slot)) return -1;
         switch (type) {
             case SINGLE:
-                if (slot != start) return -1;
-                else return 0;
-            case LINEAR_LIST:
-                if (slot > end || slot < start) return -1;
-                else return slot - start;
+                return 0;
+            case ROW:
+                return slot - start;
+            case RECTANGLE:
+                int rectangleLength = (end % 9) - (start % 9) + 1;
+                int rows = (slot / 9) - (start / 9);
+                return rectangleLength * rows + ((slot % 9) - (start % 9) + 1);
             default:
                 return -1;
         }
@@ -138,7 +189,7 @@ public class Slots {
         switch (type) {
             case SINGLE:
                 return String.valueOf(start);
-            case LINEAR_LIST:
+            case ROW:
                 return start + "-" + end;
             default:
                 return super.toString();
@@ -154,16 +205,21 @@ public class Slots {
         /**
          * Multiple slots ordered in a row, one behind each other
          */
-        LINEAR_LIST
+        ROW,
+
+        /**
+         * Multiple slots ordered in a rectangle
+         */
+        RECTANGLE
     }
 
-    public static class SlotDoubledException extends Exception {
+    public static class SlotException extends Exception {
 
         private final int slot;
         private final String slots;
 
-        public SlotDoubledException(int slot, String slots) {
-            super("slot " + slot + " was already specified");
+        public SlotException(int slot, String slots, String message) {
+            super(message);
             this.slots = slots;
             this.slot = slot;
         }

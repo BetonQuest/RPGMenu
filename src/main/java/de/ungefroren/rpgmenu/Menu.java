@@ -183,8 +183,8 @@ public class Menu extends SimpleYMLConfig implements Listener {
         }
         //check for doubled assigned slots
         try {
-            Slots.checkSlots(this.slots);
-        } catch (Slots.SlotDoubledException e) {
+            Slots.checkSlots(this.slots, this.getSize());
+        } catch (Slots.SlotException e) {
             throw new Invalid("slots." + e.getSlots(), e);
         }
 
@@ -283,6 +283,14 @@ public class Menu extends SimpleYMLConfig implements Listener {
         return height;
     }
 
+
+    /**
+     * @return the size of the menu in slots
+     */
+    public int getSize() {
+        return height * 9;
+    }
+
     /**
      * @return the title of the menu
      */
@@ -295,7 +303,7 @@ public class Menu extends SimpleYMLConfig implements Listener {
      * @return get the items for all slots
      */
     public MenuItem[] getItems(Player player) {
-        MenuItem[] items = new MenuItem[this.height * 9];
+        MenuItem[] items = new MenuItem[this.getSize()];
         for (int i = 0; i < items.length; i++) {
             items[i] = this.getItem(player, i);
         }
