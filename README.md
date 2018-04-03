@@ -52,6 +52,14 @@ If you have some ideas how to improve the plugin please let me know with [this t
 I'm always happy to get this kind of feedback, it really helps improving the plugin.
 If you use the provided templates this saves me a little work. 😄
 
+## BStats Metrics
+
+The plugin uses bStats to collect anonymous data which really helps me improving the plugin.  
+If you don't want that your server sends data to bStats you can disable it by setting enabled to false in the bStats config file.
+The config can be found in the _/plugins/bStats/config.yml_ file. BStats has nearly no effect on your server's performance.
+
+All collected data can be found [on bstats](https://bstats.org/plugin/bukkit/RPGMenu).
+
 ## Contributing 
 There are multiple ways you can contribute work to this project:
 
@@ -76,4 +84,5 @@ You find a copy of it at [LICENSE](https://github.com/joblo2213/RPGMenu/blob/mas
 **A huge "THANK YOU!" goes to:** 
 *  my buddy **Windack** for creating the awesome header and the icon.
 *  [**@Co0sh**](https://github.com/Co0sh) for creating BetonQuest, the best quest plugin out there.
+*  the discord users **Sfiguz7** and **Allego** for helping with the translation of the plugin
 *  **all people** who help improving the plugin with bug reports and suggesting issues
