@@ -49,7 +49,7 @@ public class Slots {
             this.end = Integer.parseInt(slots.substring(index + 1));
             if (this.end < this.start)
                 throw new IllegalArgumentException(slots + ": slot " + end + " must be after " + start);
-            if ((start % 9) >= (end % 9))
+            if ((start % 9) > (end % 9))
                 throw new IllegalArgumentException(slots + ": invalid rectangle ");
         } else throw new IllegalArgumentException(slots + " is not a valid slot identifier");
         this.items = items;
@@ -111,7 +111,7 @@ public class Slots {
     public boolean containsSlot(int slot) {
         switch (type) {
             case SINGLE:
-                return start != slot;
+                return start == slot;
             case ROW:
                 return (slot <= end && slot >= start);
             case RECTANGLE:
@@ -156,7 +156,7 @@ public class Slots {
             case RECTANGLE:
                 int rectangleLength = (end % 9) - (start % 9) + 1;
                 int rows = (slot / 9) - (start / 9);
-                return rectangleLength * rows + ((slot % 9) - (start % 9) + 1);
+                return rectangleLength * rows + ((slot % 9) - (start % 9));
             default:
                 return -1;
         }
@@ -191,6 +191,8 @@ public class Slots {
                 return String.valueOf(start);
             case ROW:
                 return start + "-" + end;
+            case RECTANGLE:
+                return start + "*" + end;
             default:
                 return super.toString();
         }
