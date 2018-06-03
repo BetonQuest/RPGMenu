@@ -1,3 +1,8 @@
+---
+name: Bug report
+about: Report a error to help me fixing it
+
+---
 
 <!-- Follow this template if reporting a bug! -->
 
