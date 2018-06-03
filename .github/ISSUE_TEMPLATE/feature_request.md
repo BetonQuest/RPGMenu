@@ -1,3 +1,8 @@
+---
+name: Feature request
+about: Suggest new features to help improving the plugin
+
+---
 
 <!-- Follow this template if requesting a new feature! -->
 
