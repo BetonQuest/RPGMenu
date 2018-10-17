@@ -8,7 +8,7 @@ For all this you only have to be familliar with BetonQuests events/conditions sy
 Everything can be created by simply creating and modifying config files in YAML.
 
 ## Features 
-* Spigot **1.9**, **1.10**, **1.11** and **1.12** support
+* Spigot **1.9**, **1.10**, **1.11**, **1.12** and **1.13** support
 * Completly **costumizable** guis
 * **Display** or **hide** items in guis based on **conditions**
 * Run **events** when items are clicked, menus are opened or closed 

@@ -88,7 +88,8 @@ Each item has the following settings:
 
 *  `text`: *(list of strings)*  
   In the text section you can specify the text that is displayed if you hover over the item.
-  The lore and the display name of the item specified in `items.yml` will be overwritten by this. 
+  The lore and the display name of the item specified in `items.yml` will be overwritten by this.
+  If no text is specified the items default name and lore from `items.yml` will be kept.
   You can use [formatting codes](https://minecraft.gamepedia.com/Formatting_codes) with `&` and [variables](https://github.com/Co0sh/BetonQuest/wiki/Variables-List)
   
    **Example:**

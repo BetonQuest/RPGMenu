@@ -193,15 +193,21 @@ public abstract class SimpleYMLSection {
      */
     protected Material getMaterial(String key) throws Missing, Invalid {
         String s = this.getString(key);
-        try {
-            Material m = Material.getMaterial(Integer.parseInt(s));
-            if (m != null) return m;
-            else throw new Invalid(key);
-        } catch (NumberFormatException e) {
-            Material m = Material.getMaterial(s.toUpperCase().replace(" ", "_"));
-            if (m != null) return m;
-            else throw new Invalid(key, "'" + s + "' isn't a material");
+        if (key.trim().matches("\\d+")) {
+            throw new Invalid(key, "Material numbers can no longer be supported! Please use the names instead.");
         }
+        Material m;
+        try {
+            m  = Material.matchMaterial(s.replace(" ", "_"));
+            if (m == null) {
+                m = Material.matchMaterial(s.replace(" ", "_"), true);
+            }
+        } catch (LinkageError error) {
+            //pre 1.13
+            m = Material.getMaterial(s.toUpperCase().replace(" ", "_"));
+        }
+        if (m != null) return m;
+        else throw new Invalid(key, "'" + s + "' isn't a material");
     }
 
     /**

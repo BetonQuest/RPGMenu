@@ -163,7 +163,7 @@ public class RPGMenu extends JavaPlugin {
             new ReloadListener();
         } else {
             //load all data on first tick
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> reloadData());
+            Bukkit.getScheduler().scheduleSyncDelayedTask(this, this::reloadData);
         }
     }
 

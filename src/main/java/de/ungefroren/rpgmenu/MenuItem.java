@@ -106,15 +106,18 @@ public class MenuItem extends SimpleYMLSection {
             this.item = new Item(itemID, amount);
             // load description
             this.descriptions = new HashMap<>();
-            if (section.isConfigurationSection("text")) {
-                for (String lang : section.getConfigurationSection("text").getKeys(false)) {
-                    this.descriptions.put(lang, new ItemDescription(this.pack, getStringList("text." + lang)));
+            try {
+                if (section.isConfigurationSection("text")) {
+                    for (String lang : section.getConfigurationSection("text").getKeys(false)) {
+                        this.descriptions.put(lang, new ItemDescription(this.pack, getStringList("text." + lang)));
+                    }
+                    if (!this.descriptions.containsKey(Config.getLanguage()))
+                        throw new Missing("text." + Config.getLanguage());
+                } else {
+                    this.descriptions.put(Config.getLanguage(),
+                            new ItemDescription(this.pack, getStringList("text")));
                 }
-                if (!this.descriptions.containsKey(Config.getLanguage()))
-                    throw new Missing("text." + Config.getLanguage());
-            } else {
-                this.descriptions.put(Config.getLanguage(),
-                        new ItemDescription(this.pack, getStringList("text")));
+            } catch (Missing missing) {
             }
             //load events
             this.left_click = new ArrayList<>();
@@ -216,15 +219,17 @@ public class MenuItem extends SimpleYMLSection {
             String lang = BetonQuest.getInstance().getPlayerData(playerId).getLanguage();
             ItemStack item = this.item.generate(playerId);
             ItemMeta meta = item.getItemMeta();
-            ItemDescription description = this.descriptions.get(lang);
-            if (description == null) description = this.descriptions.get(Config.getLanguage());
-            try {
-                meta.setDisplayName(description.getDisplayName(playerId));
-                meta.setLore(description.getLore(playerId));
-                item.setItemMeta(meta);
-            } catch (NullPointerException npe) {
-                Log.error("Couldn't add custom text to §7" + id + "§4: No text for language §7" + Config.getLanguage() + "§4 " +
-                        "specified");
+            if (!descriptions.isEmpty()) {
+                ItemDescription description = this.descriptions.get(lang);
+                if (description == null) description = this.descriptions.get(Config.getLanguage());
+                try {
+                    meta.setDisplayName(description.getDisplayName(playerId));
+                    meta.setLore(description.getLore(playerId));
+                    item.setItemMeta(meta);
+                } catch (NullPointerException npe) {
+                    Log.error("Couldn't add custom text to §7" + id + "§4: No text for language §7" + Config.getLanguage() + "§4 " +
+                            "specified");
+                }
             }
             return item;
         } catch (QuestRuntimeException qre) {
