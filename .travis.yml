@@ -3,6 +3,9 @@ notifications:
 language: java
 jdk:
 - oraclejdk8
+cache:
+  directories:
+    - "$HOME/.m2/repository"
 install: true
 script: mvn package
 env:
