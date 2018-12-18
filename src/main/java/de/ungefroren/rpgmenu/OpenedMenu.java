@@ -48,6 +48,7 @@ public class OpenedMenu implements Listener {
     private final UUID playerId;
     private final Menu data;
     private MenuItem[] items;
+    private boolean closed = false;
 
     public OpenedMenu(Player player, Menu menu) {
         this.data = menu;
@@ -91,6 +92,13 @@ public class OpenedMenu implements Listener {
     }
 
     /**
+     * @return true if menu was closed
+     */
+    public boolean isClosed() {
+        return closed;
+    }
+
+    /**
      * @return the id of this menu
      */
     public MenuID getId() {
@@ -123,6 +131,7 @@ public class OpenedMenu implements Listener {
      */
     public void close() {
         getPlayer().closeInventory();
+        closed = true;
     }
 
     /**
@@ -181,6 +190,11 @@ public class OpenedMenu implements Listener {
         }
         //handle click
         boolean close = item.onClick(player, event.getClick());
+        // If we are already closed then we are done
+        if (closed) {
+            return;
+        }
+
         //if close was set close the menu
         if (close) this.close();
             // otherwise update the contents
