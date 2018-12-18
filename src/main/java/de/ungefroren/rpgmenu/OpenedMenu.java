@@ -51,6 +51,12 @@ public class OpenedMenu implements Listener {
     private boolean closed = false;
 
     public OpenedMenu(Player player, Menu menu) {
+        // If player already has an open menu we close it first
+        OpenedMenu current = getMenu(player);
+        if (current != null) {
+            current.close();
+        }
+
         this.data = menu;
         this.playerId = player.getUniqueId();
         Inventory inventory = Bukkit.createInventory(null, data.getSize(), data.getTitle());
