@@ -11,6 +11,7 @@
  */
 package de.ungefroren.rpgmenu.betonquest;
 
+import de.ungefroren.rpgmenu.utils.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -18,10 +19,9 @@ import org.bukkit.event.Listener;
 
 import pl.betoncraft.betonquest.BetonQuest;
 import pl.betoncraft.betonquest.Instruction;
-import pl.betoncraft.betonquest.InstructionParseException;
-import pl.betoncraft.betonquest.ObjectNotFoundException;
 import pl.betoncraft.betonquest.api.Objective;
-import pl.betoncraft.betonquest.utils.Debug;
+import pl.betoncraft.betonquest.exceptions.InstructionParseException;
+import pl.betoncraft.betonquest.exceptions.ObjectNotFoundException;
 import pl.betoncraft.betonquest.utils.PlayerConverter;
 
 import de.ungefroren.rpgmenu.Menu;
@@ -79,7 +79,7 @@ public class MenuObjective extends Objective implements Listener {
         if (name.equalsIgnoreCase("menu")) {
             Menu menuData = RPGMenu.getInstance().getMenu(menuID);
             if (menuData == null) {
-                Debug.error("Error while getting menu property in '" + instruction.getID() + "' objective: "
+                Log.debug("Error while getting menu property in '" + instruction.getID() + "' objective: "
                         + "menu with id " + menuID + " isn't loaded");
                 return "";
             }

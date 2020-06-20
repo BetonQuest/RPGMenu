@@ -26,8 +26,6 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-
-import pl.betoncraft.betonquest.ObjectNotFoundException;
 import pl.betoncraft.betonquest.config.Config;
 import pl.betoncraft.betonquest.config.ConfigPackage;
 
@@ -35,6 +33,7 @@ import de.ungefroren.rpgmenu.MenuID;
 import de.ungefroren.rpgmenu.RPGMenu;
 import de.ungefroren.rpgmenu.config.RPGMenuConfig;
 import de.ungefroren.rpgmenu.utils.Log;
+import pl.betoncraft.betonquest.exceptions.ObjectNotFoundException;
 
 /**
  * The plugins main command

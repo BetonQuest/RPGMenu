@@ -11,14 +11,12 @@
  */
 package de.ungefroren.rpgmenu.betonquest;
 
-import org.bukkit.entity.Player;
-
-import pl.betoncraft.betonquest.Instruction;
-import pl.betoncraft.betonquest.InstructionParseException;
-import pl.betoncraft.betonquest.api.Variable;
-import pl.betoncraft.betonquest.utils.PlayerConverter;
-
 import de.ungefroren.rpgmenu.OpenedMenu;
+import org.bukkit.entity.Player;
+import pl.betoncraft.betonquest.Instruction;
+import pl.betoncraft.betonquest.api.Variable;
+import pl.betoncraft.betonquest.exceptions.InstructionParseException;
+import pl.betoncraft.betonquest.utils.PlayerConverter;
 
 /**
  * Returns the title of the players currently opened menu

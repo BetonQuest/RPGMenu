@@ -14,10 +14,10 @@ package de.ungefroren.rpgmenu.betonquest;
 import org.bukkit.entity.Player;
 
 import pl.betoncraft.betonquest.Instruction;
-import pl.betoncraft.betonquest.InstructionParseException;
-import pl.betoncraft.betonquest.ObjectNotFoundException;
-import pl.betoncraft.betonquest.QuestRuntimeException;
 import pl.betoncraft.betonquest.api.Condition;
+import pl.betoncraft.betonquest.exceptions.InstructionParseException;
+import pl.betoncraft.betonquest.exceptions.ObjectNotFoundException;
+import pl.betoncraft.betonquest.exceptions.QuestRuntimeException;
 import pl.betoncraft.betonquest.utils.PlayerConverter;
 
 import de.ungefroren.rpgmenu.MenuID;
@@ -35,7 +35,7 @@ public class MenuCondition extends Condition {
     private MenuID menuID;
 
     public MenuCondition(Instruction instruction) throws InstructionParseException {
-        super(instruction);
+        super(instruction, true);
         String id = instruction.getOptional("id");
         try {
             this.menuID = (id == null) ? null : new MenuID(instruction.getPackage(), id);
@@ -45,7 +45,7 @@ public class MenuCondition extends Condition {
     }
 
     @Override
-    public boolean check(String playerId) throws QuestRuntimeException {
+    public Boolean execute(String playerId) throws QuestRuntimeException {
         Player player = PlayerConverter.getPlayer(playerId);
         return RPGMenu.hasOpenedMenu(player, menuID);
     }

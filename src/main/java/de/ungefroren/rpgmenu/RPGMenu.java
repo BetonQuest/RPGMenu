@@ -28,7 +28,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import pl.betoncraft.betonquest.BetonQuest;
-import pl.betoncraft.betonquest.ObjectNotFoundException;
 import pl.betoncraft.betonquest.config.Config;
 import pl.betoncraft.betonquest.config.ConfigPackage;
 
@@ -43,6 +42,7 @@ import de.ungefroren.rpgmenu.utils.Log;
 import de.ungefroren.rpgmenu.utils.Updater;
 import de.ungefroren.rpgmenu.utils.Utils;
 import org.bstats.bukkit.Metrics;
+import pl.betoncraft.betonquest.exceptions.ObjectNotFoundException;
 
 /**
  * Created on 12.01.2018
@@ -132,7 +132,7 @@ public class RPGMenu extends JavaPlugin {
         instance = this;
         super.onEnable();
         //plugin metrics
-        Metrics metrics = new Metrics(this);
+        Metrics metrics = new Metrics(this, 2391);
         metrics.addCustomChart(new Metrics.SimplePie("language", Config::getLanguage));
         metrics.addCustomChart(new Metrics.SingleLineChart("menus", () -> menus.size()));
         updater = new Updater();

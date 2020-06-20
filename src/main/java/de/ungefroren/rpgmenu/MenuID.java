@@ -12,12 +12,12 @@
 
 package de.ungefroren.rpgmenu;
 
+import pl.betoncraft.betonquest.ID;
+import pl.betoncraft.betonquest.config.ConfigPackage;
+import pl.betoncraft.betonquest.exceptions.ObjectNotFoundException;
+
 import java.io.File;
 import java.util.Objects;
-
-import pl.betoncraft.betonquest.ID;
-import pl.betoncraft.betonquest.ObjectNotFoundException;
-import pl.betoncraft.betonquest.config.ConfigPackage;
 
 /**
  * Id of a menu

@@ -15,11 +15,10 @@ package de.ungefroren.rpgmenu.config;
 import java.io.File;
 import java.io.IOException;
 
+import de.ungefroren.rpgmenu.utils.Log;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import pl.betoncraft.betonquest.utils.Debug;
 
 /**
  * Created on 24.01.2018
@@ -52,7 +51,7 @@ public abstract class SimpleYMLConfig extends SimpleYMLSection {
             ((FileConfiguration) super.config).save(this.file);
             return true;
         } catch (IOException e) {
-            Debug.error(e.getMessage());
+            Log.debug(e.getMessage());
             return false;
         }
     }

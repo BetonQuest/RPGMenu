@@ -17,10 +17,10 @@ import java.util.Collection;
 import java.util.List;
 
 import pl.betoncraft.betonquest.BetonQuest;
-import pl.betoncraft.betonquest.InstructionParseException;
 import pl.betoncraft.betonquest.config.ConfigPackage;
 
 import de.ungefroren.rpgmenu.utils.Utils;
+import pl.betoncraft.betonquest.exceptions.InstructionParseException;
 
 /**
  * Contains the description of a item in a menu. Variables are parsed and color codes are replaced.

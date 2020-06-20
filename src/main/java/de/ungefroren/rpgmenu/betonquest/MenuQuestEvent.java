@@ -14,10 +14,10 @@ package de.ungefroren.rpgmenu.betonquest;
 import org.bukkit.entity.Player;
 
 import pl.betoncraft.betonquest.Instruction;
-import pl.betoncraft.betonquest.InstructionParseException;
-import pl.betoncraft.betonquest.ObjectNotFoundException;
-import pl.betoncraft.betonquest.QuestRuntimeException;
 import pl.betoncraft.betonquest.api.QuestEvent;
+import pl.betoncraft.betonquest.exceptions.InstructionParseException;
+import pl.betoncraft.betonquest.exceptions.ObjectNotFoundException;
+import pl.betoncraft.betonquest.exceptions.QuestRuntimeException;
 import pl.betoncraft.betonquest.utils.PlayerConverter;
 
 import de.ungefroren.rpgmenu.MenuID;
@@ -35,7 +35,7 @@ public class MenuQuestEvent extends QuestEvent {
     private final Operation operation;
     private MenuID menu;
     public MenuQuestEvent(Instruction instruction) throws InstructionParseException {
-        super(instruction);
+        super(instruction,true);
         this.operation = instruction.getEnum(Operation.class);
         if (this.operation == Operation.OPEN) {
             try {
@@ -47,13 +47,14 @@ public class MenuQuestEvent extends QuestEvent {
     }
 
     @Override
-    public void run(String playerID) throws QuestRuntimeException {
+    public Void execute(String playerID) throws QuestRuntimeException {
         Player player = PlayerConverter.getPlayer(playerID);
         if (operation == Operation.OPEN) {
             RPGMenu.openMenu(player, menu);
         } else {
             RPGMenu.closeMenu(player);
         }
+        return null;
     }
 
     public enum Operation {

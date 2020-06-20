@@ -15,11 +15,11 @@
         </repository>
         <repository>
             <id>betonquest-repo</id>
-            <url>http://betonquest.pl/mvn</url>
+            <url>http://amberproject.net:8082/repository/AmberProject/</url>
         </repository>
         <repository>
-            <id>bstats-repo</id>
-            <url>http://repo.bstats.org/content/repositories/releases/</url>
+            <id>CodeMC</id>
+            <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
     </repositories>
     <dependencies>
@@ -36,16 +36,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>pl.betoncraft.betonquest</groupId>
-            <artifactId>BetonQuest</artifactId>
-            <version>1.9</version>
+            <groupId>pl.betoncraft</groupId>
+            <artifactId>betonquest</artifactId>
+            <version>1.12.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>1.2</version>
-            <scope>compile</scope>
+            <version>1.7</version>
         </dependency>
     </dependencies>
     <build>
@@ -80,7 +79,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>default-jar</id>

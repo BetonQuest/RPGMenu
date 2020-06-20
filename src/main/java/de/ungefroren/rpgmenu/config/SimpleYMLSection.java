@@ -22,8 +22,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import pl.betoncraft.betonquest.ConditionID;
 import pl.betoncraft.betonquest.EventID;
-import pl.betoncraft.betonquest.ObjectNotFoundException;
 import pl.betoncraft.betonquest.config.ConfigPackage;
+import pl.betoncraft.betonquest.exceptions.ObjectNotFoundException;
 
 /**
  * Abstract class to help parsing of yml config files
