@@ -38,6 +38,7 @@ messages:
   fr:
     command_no_permission: '&7[&c&l!&7] Pas de permissions!'
     menu_do_not_open: '&7[&c&l!&7] Pas de permissions!'
+    command_usage: '&cusage:\n&7{1}'
     command_info_reload: '&brecharges tous/un menu(s)'
     command_info_list: '&bouvre un menu [pour un joueur]'
     command_info_open: '&bliste tous les menus'
