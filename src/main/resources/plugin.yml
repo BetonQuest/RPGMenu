@@ -1,6 +1,6 @@
 # RPGMenu plugin.yml - See https://bukkit.gamepedia.com/Plugin_YAML/de for more information
 name: RPGMenu
-version: 4.0.1
+version: 4.0.2
 api-version: 1.13
 description: 'A addon for BetonQuest which allows you to simply create your own guis by using events and items from BetonQuest.'
 author: ungefroren
