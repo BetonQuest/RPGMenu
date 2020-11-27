@@ -82,8 +82,8 @@ public class ItemDescription {
             //set line
             this.line = Utils.translateAlternateColorcodes('&', line);
             //find variables
-            this.variables = new ArrayList<>();
-            for (String variable : BetonQuest.resolveVariables(line)) {
+            this.variables = new ArrayList<>(BetonQuest.resolveVariables(line));
+            for (String variable : variables) {
                 try {
                     BetonQuest.createVariable(pack, variable);
                 } catch (InstructionParseException e) {
