@@ -78,7 +78,7 @@ public class Updater {
      * @return if the current version is up to date (if updater is not initialised this returns true)
      */
     public boolean isVersionUpToDate() {
-        return error || !current.isNewer(latest, UpdateStrategy.MAYOR);
+        return error || !current.isNewer(latest, UpdateStrategy.MAJOR);
     }
 
     /**
