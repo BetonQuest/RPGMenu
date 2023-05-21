@@ -55,7 +55,7 @@
                 <dependency>
                     <groupId>pl.betoncraft</groupId>
                     <artifactId>betonquest</artifactId>
-                    <version>1.12.0-SNAPSHOT</version>
+                    <version>1.12.10-SNAPSHOT</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
