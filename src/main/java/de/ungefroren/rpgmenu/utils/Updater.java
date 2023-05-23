@@ -12,14 +12,12 @@
 
 package de.ungefroren.rpgmenu.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-
+import de.ungefroren.rpgmenu.RPGMenu;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -28,17 +26,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-
 import pl.betoncraft.betonquest.BetonQuest;
-import pl.betoncraft.betonquest.utils.Updater.UpdateStrategy;
-import pl.betoncraft.betonquest.utils.Updater.Version;
+import pl.betoncraft.betonquest.utils.versioning.UpdateStrategy;
+import pl.betoncraft.betonquest.utils.versioning.Version;
+import pl.betoncraft.betonquest.utils.versioning.VersionComparator;
 
-import de.ungefroren.rpgmenu.RPGMenu;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Utility class that informs about available updates and keeps the config up to date
@@ -78,7 +77,8 @@ public class Updater {
      * @return if the current version is up to date (if updater is not initialised this returns true)
      */
     public boolean isVersionUpToDate() {
-        return error || !current.isNewer(latest, UpdateStrategy.MAJOR);
+        VersionComparator comparator = new VersionComparator(UpdateStrategy.MAJOR);
+        return error || comparator.isOtherNewerThanCurrent(current, latest);
     }
 
     /**
@@ -121,7 +121,7 @@ public class Updater {
      */
     public void showVersionInfo() {
         if (error) return;
-        if (current.isDev()) {
+        if (current.hasQualifier()) {
             Log.info("You are using an development build of RPGMenu.\n" +
                     "Development builds may contain bugs so be cautious.\n" +
                     "If you find some please report them on the plugins GitHub page so I can fix them.");
